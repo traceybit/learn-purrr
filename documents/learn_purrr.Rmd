@@ -443,7 +443,7 @@ This is where a lot of the power of `purrr` starts to come in, allowing you to e
 got_chars %>%
   set_names(map_chr(.,'name')) %>%
   map(`[`,c('name','allegiances')) %>%
-  purrr::keep(~stringr::str_detect(.$name, 'Lannister')) %>%
+  purrr::keep(~stringr::str_detect(.x$name, 'Lannister')) %>%
   listviewer::jsonedit()
 ```
 
@@ -890,9 +890,12 @@ How do we figure out which tech's are the problem? We can use `map_lgl` to help 
 bad_lengths <- map_lgl(diagnose_length, ~is.null(.x$error) == F)
 
 bad_techs <- diagnose_length %>% 
-  keep(bad_lengths)
+  keep(bad_lengths) 
+  # map(error)
 
 names(bad_techs)
+
+
 ```
 
 I leave it to your imagination to think of how to resolve this problem, but at least we now know where the problem is. One strategy is to use the handy `possibly` function from `purrr`. This basically says try a function and return its value if it works, otherwise return something else. 
